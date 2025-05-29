@@ -86,7 +86,13 @@ def debug_error(error: str) -> list[base.Message]:
         base.AssistantMessage("Entendido. Posso tentar ajudar a depurar. O que vocÃª jÃ¡ tentou fazer para resolver?"),
     ]
 
+
 # Defina o bloco principal de execuÃ§Ã£o
 if __name__ == "__main__":
-    mcp.run()
-
+    #mcp.run()
+    mcp.run(host='0.0.0.0', port=6274, debug=False)
+    
+    # Para FastAPI
+    import uvicorn
+    uvicorn.run(mcp, host="0.0.0.0", port=6274)
+    
