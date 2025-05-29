@@ -20,4 +20,11 @@ COPY . .
 EXPOSE 6274
 
 # O comando final será sobrescrito via smithery.yaml
-CMD ["python", "myservermcp.py"]
+#CMD ["python", "myservermcp.py"]
+
+# No final do Dockerfile, antes do CMD
+RUN echo "Verificando arquivos..." && ls -la
+RUN echo "Testando Python..." && python --version
+
+# Comando com mais verbosidade
+CMD ["python", "-u", "myservermcp.py"]
