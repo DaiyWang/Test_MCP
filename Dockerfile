@@ -27,4 +27,4 @@ RUN echo "Verificando arquivos..." && ls -la
 RUN echo "Testando Python..." && python --version
 
 # Comando com mais verbosidade
-CMD ["python", "-u", "myservermcp.py"]
+CMD ["python", "-u", "main.py"]
