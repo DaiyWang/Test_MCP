@@ -1,30 +1,32 @@
-# Usa imagem leve do Python
-FROM python:3.11-alpine
+# Use official Node.js runtime as base image
+FROM node:18-alpine
 
-# Define o diretório de trabalho
+# Set working directory
 WORKDIR /app
 
-# Copia os arquivos de dependência (caso tenha)
-COPY requirements.txt ./
+# Copy package files
+COPY package*.json ./
 
-# Instala as dependências
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies
+RUN npm ci --only=production
 
-# Copia o restante do código
+# Copy source code
 COPY . .
 
-# A build pode ser omitida se não houver transpilação. Se houver algum passo, adicione aqui
-# RUN algum_comando_de_build (como um script de preparação, se necessário)
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S mcp -u 1001
 
-# A porta exposta depende do que seu servidor usa (ex: 6274 ou 8000)
-EXPOSE 6274
+# Change ownership of the app directory
+RUN chown -R mcp:nodejs /app
+USER mcp
 
-# O comando final será sobrescrito via smithery.yaml
-#CMD ["python", "myservermcp.py"]
+# Expose port (adjust based on your MCP server configuration)
+EXPOSE 3000
 
-# No final do Dockerfile, antes do CMD
-RUN echo "Verificando arquivos..." && ls -la
-RUN echo "Testando Python..." && python --version
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 
-# Comando com mais verbosidade
-CMD ["python", "-u", "myservermcp.py"]
+# Start the MCP server
+CMD ["npm", "start"]
