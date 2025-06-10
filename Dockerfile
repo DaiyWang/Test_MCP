@@ -1,32 +1,23 @@
-# Use official Node.js runtime as base image
-FROM node:18-alpine
+# Usa imagem leve do Python
+FROM python:3.11-alpine
 
-# Set working directory
+# Define o diretório de trabalho
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copia o arquivo de dependências primeiro
+COPY requirements.txt ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Instala as dependências
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy source code
+# Copia o restante do código
 COPY . .
 
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S mcp -u 1001
+# Expõe a porta
+EXPOSE 6274
 
-# Change ownership of the app directory
-RUN chown -R mcp:nodejs /app
-USER mcp
+# Define variáveis de ambiente
+ENV PYTHONUNBUFFERED=1
 
-# Expose port (adjust based on your MCP server configuration)
-EXPOSE 3000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/health || exit 1
-
-# Start the MCP server
-CMD ["npm", "start"]
+# CORREÇÃO: Usar main.py ao invés de myservermcp.py
+CMD ["python", "main.py"]
