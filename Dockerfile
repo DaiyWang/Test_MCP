@@ -4,20 +4,27 @@ FROM python:3.11-alpine
 # Define o diretório de trabalho
 WORKDIR /app
 
-# Copia o arquivo de dependências primeiro
+# Copia os arquivos de dependência (caso tenha)
 COPY requirements.txt ./
 
 # Instala as dependências
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia o restante do código
-COPY . .
+COPY myservermcp.py ./
 
-# Expõe a porta
+# A build pode ser omitida se não houver transpilação. Se houver algum passo, adicione aqui
+# RUN algum_comando_de_build (como um script de preparação, se necessário)
+
+# A porta exposta depende do que seu servidor usa (ex: 6274 ou 8000)
 EXPOSE 6274
 
-# Define variáveis de ambiente
-ENV PYTHONUNBUFFERED=1
+# O comando final será sobrescrito via smithery.yaml
+#CMD ["python", "myservermcp.py"]
 
-# CORREÇÃO: Usar main.py ao invés de myservermcp.py
-CMD ["python", "main.py"]
+# No final do Dockerfile, antes do CMD
+RUN echo "Verificando arquivos..." && ls -la
+RUN echo "Testando Python..." && python --version
+
+# Comando com mais verbosidade
+CMD ["python", "-u", "main.py"]
