@@ -23,6 +23,7 @@ RUN pip install uv && \
 # Copia o restante do código da aplicação para o diretório de trabalho
 COPY myservermcp.py .
 
+EXPOSE 8080
 # Comando para iniciar o servidor MCP quando o container for executado
 # O servidor será executado com o transporte 'stdio', o que é necessário para a integração com o Claude for Desktop.
 CMD ["uv", "run", "myservermcp.py"]
