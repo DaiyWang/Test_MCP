@@ -17,8 +17,15 @@ COPY requirements.txt .
 # O 'uv' é uma ferramenta rápida e moderna para pacotes Python.
 # O 'pip' é usado aqui para instalar o 'uv' globalmente no container.
 # As dependências do projeto são então instaladas via 'uv'.
-RUN pip install uv && \
-    uv pip install -r requirements.txt
+# ... (outras linhas do seu Dockerfile)
+
+# Instala o uv (se ainda não estiver na imagem base)
+RUN pip install --no-cache-dir uv
+
+# Instala as dependências do projeto usando uv, forçando a instalação no sistema
+RUN uv pip install --system -r requirements.txt
+
+# ... (restante do seu Dockerfile)
 
 # Copia o restante do código da aplicação para o diretório de trabalho
 COPY myservermcp.py .
