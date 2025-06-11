@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY . .
 
 # Expõe a porta que o servidor FastMCP irá usar
-EXPOSE 6274
+EXPOSE 8080
 
 # Define o comando que será executado quando o contêiner for iniciado
 # Isso iniciará seu servidor FastMCP
