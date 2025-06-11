@@ -90,7 +90,7 @@ def debug_error(error: str) -> list[base.Message]:
 # Defina o bloco principal de execuÃ§Ã£o
 if __name__ == "__main__":
     #mcp.run()
-    mcp.run(port=6274, debug=False)
+    mcp.run(debug=False, port=6274) # A ordem pode importar para alguns.
     
     # Para FastAPI
     import uvicorn
